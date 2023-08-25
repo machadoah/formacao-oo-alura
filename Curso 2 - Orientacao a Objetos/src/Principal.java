@@ -29,5 +29,7 @@ public class Principal {
         System.out.println(meuFilme.getSomaAvaliacoes());
         System.out.println(meuFilme.getTotalDeAvaliacoes());
         System.out.printf("A média das avaliações é %.2f.", meuFilme.pegaMedia());
+
+
     }
 }
