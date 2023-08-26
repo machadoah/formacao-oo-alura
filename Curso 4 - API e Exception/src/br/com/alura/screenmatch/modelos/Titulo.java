@@ -1,13 +1,15 @@
 package br.com.alura.screenmatch.modelos;
 
-import com.google.gson.annotations.SerializedName;
+import br.com.alura.screenmatch.excecao.ErroConversaoAnoException;
 
 public class Titulo implements Comparable<Titulo>{
 
-    @SerializedName("Title")
+    // @SerializedName("Name")
+    // é uma anotação que referencia o nome que vem no Json!
+    // Para 'Title' apontar para 'nome'
+    // > @SerializedName("Title")
     private String nome;
 
-    @SerializedName("Year")
     private int anoDeLancamento;
     private boolean incluidoNoPlano;
     private double somaAvaliacoes;
@@ -26,6 +28,17 @@ public class Titulo implements Comparable<Titulo>{
     // construtor que recebe nome
     public Titulo(String nome){
         this.setNome(nome);
+    }
+
+    public Titulo(TituloOmdb meuTituloOmdb) {
+        this.nome = meuTituloOmdb.title();
+
+        if(meuTituloOmdb.year().length() > 4) {
+            throw new ErroConversaoAnoException("Não consegui converter o ano: Mais de 04 algarismos.");
+        }
+
+        this.anoDeLancamento = Integer.valueOf(meuTituloOmdb.year());
+        this.duracaoEmMinutos = Integer.valueOf(meuTituloOmdb.runtime().substring(0, 3).trim());
     }
 
     public void exibeFichaTecnica(){
@@ -47,7 +60,7 @@ public class Titulo implements Comparable<Titulo>{
     }
 
     public String getNome() {
-        return "Titulo: " + nome;
+        return nome;
     }
 
     public void setNome(String nome) {
@@ -95,6 +108,8 @@ public class Titulo implements Comparable<Titulo>{
 
     @Override
     public String toString() {
-        return "filme: %s - ano de lançamento: %d".formatted(this.getNome(),this.getAnoDeLancamento());
+        return ("(nome: %s, " +
+                "ano de Lançamento: %d, " +
+                "tempo de duração: %d)").formatted(this.getNome(), this.getAnoDeLancamento(), this.getDuracaoEmMinutos());
     }
 }
